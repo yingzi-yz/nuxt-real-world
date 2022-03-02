@@ -13,12 +13,13 @@
               <li>That email is already taken</li>
             </ul>
 
-            <form>
+            <form @submit.prevent="onRegister">
               <fieldset class="form-group">
                 <input
                   class="form-control form-control-lg"
                   type="text"
                   placeholder="Your Name"
+                  v-model="user.username"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -26,6 +27,7 @@
                   class="form-control form-control-lg"
                   type="text"
                   placeholder="Email"
+                  v-model="user.email"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -33,6 +35,7 @@
                   class="form-control form-control-lg"
                   type="password"
                   placeholder="Password"
+                  v-model="user.password"
                 />
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
@@ -47,8 +50,32 @@
 </template>
 
 <script>
+import {register} from '@/api/user'
+
 export default {
   name: "registerPage",
+  asyncData() {
+    return {
+      user: {
+        username: '',
+        emali: '',
+        password: '',
+      }
+    }
+  },
+  data() {
+    return {
+
+    }
+  },
+  created() {
+
+  },
+  methods: {
+    onRegister() {
+      
+    }
+  }
 };
 </script>
 

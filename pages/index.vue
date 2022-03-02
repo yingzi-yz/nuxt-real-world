@@ -48,14 +48,7 @@
             <p>Popular Tags</p>
 
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <a href="" class="tag-pill tag-default" v-for="(v, i) in tags" :key="i">{{v}}</a>
             </div>
           </div>
         </div>
@@ -66,14 +59,22 @@
 
 <script>
 import {getArticles} from '@/api/article'
+import {getTags} from '@/api/tag'
 
 export default {
   name: "indexPage",
   async asyncData() {
-    const {data} = await getArticles();
+    // const {data} = await getArticles();
+    // const {data: tagsData} = await getTags();
+    // return {
+    //   articles: data.articles,
+    //   tags: tagsData.tags
+    // }    
+    const [articlesResult, tagsResult] = await Promise.all([getArticles(), getTags()]);
 
     return {
-      articles: data.articles
+      articles: articlesResult.data.articles,
+      tags: tagsResult.data.tags
     }
   },
   data() {
