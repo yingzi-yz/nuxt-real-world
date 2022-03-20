@@ -10,15 +10,16 @@
             </p>
 
             <ul class="error-messages">
-              <li>That email is already taken</li>
+              <li v-for="(value, key) in errors" :key="key">{{key}} {{value[0]}}</li>
             </ul>
 
-            <form>
+            <form @submit.prevent="onLogin">
               <fieldset class="form-group">
                 <input
                   class="form-control form-control-lg"
                   type="text"
                   placeholder="Email"
+                  v-model="user.email"
                 />
               </fieldset>
               <fieldset class="form-group">
@@ -26,6 +27,7 @@
                   class="form-control form-control-lg"
                   type="password"
                   placeholder="Password"
+                  v-model="user.password"
                 />
               </fieldset>
               <button class="btn btn-lg btn-primary pull-xs-right">
@@ -40,8 +42,44 @@
 </template>
 
 <script>
+import {login} from '@/api/user'
+
+// 用于只在客户端使用cookie
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
   name: "loginPage",
+  middleware: ['notAuthenticated'],
+  data() {
+    return {
+      user: {
+        email: '',
+        password: '',
+      },
+      errors: {}
+    }
+  },
+  created() {
+
+  },
+  methods: {
+    async onLogin() {
+      try {
+        const {data} = await login({
+          user: this.user
+        })
+        this.errors = {};
+
+        this.$store.commit('setUser', data.user);
+
+        Cookie.set('user', data.user);
+
+        this.$router.push('/');
+      } catch (err) {
+        this.errors = err.response.data.errors;
+      }
+    }
+  }
 };
 </script>
 

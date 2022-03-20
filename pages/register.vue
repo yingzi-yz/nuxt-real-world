@@ -10,7 +10,7 @@
             </p>
 
             <ul class="error-messages">
-              <li>That email is already taken</li>
+              <li v-for="(value, key) in errors" :key="key">{{key}} {{value[0]}}</li>
             </ul>
 
             <form @submit.prevent="onRegister">
@@ -54,13 +54,15 @@ import {register} from '@/api/user'
 
 export default {
   name: "registerPage",
+  middleware: ['notAuthenticated'],  
   asyncData() {
     return {
       user: {
         username: '',
         emali: '',
         password: '',
-      }
+      },
+      errors: {}
     }
   },
   data() {
@@ -72,8 +74,19 @@ export default {
 
   },
   methods: {
-    onRegister() {
-      
+    async onRegister() {
+      const user = this.user;
+      try {
+        const {data} = await register({
+          user
+        })
+        this.errors = {};
+        this.$router.push('/');
+      } catch (err) {
+        // console.dir(err)
+        this.errors = err.response.data.errors;
+      }
+
     }
   }
 };

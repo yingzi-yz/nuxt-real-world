@@ -22,7 +22,7 @@
             </ul>
           </div>
 
-          <div class="article-preview" v-for="(v, i) in articles" :key="i">
+          <div class="article-preview" v-for="(v, i) in articles" :key="i" @click.prevent="toArticleDetail(v)">
             <div class="article-meta">
               <a href="profile.html">
                 <img :src="v.author.image" />
@@ -80,6 +80,11 @@ export default {
   data() {
     return {
 
+    }
+  },
+  methods: {
+    toArticleDetail(v) {
+      this.$router.push('/article/'+v.slug);
     }
   }
 }

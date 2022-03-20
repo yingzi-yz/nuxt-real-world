@@ -48,6 +48,12 @@
                 </button>
               </fieldset>
             </form>
+
+            <hr>
+
+            <button class="btn btn-outline-danger" @click="onLogout">
+              Or click here to logout
+            </button>
           </div>
         </div>
       </div>
@@ -56,8 +62,19 @@
 </template>
 
 <script>
+// 用于只在客户端使用cookie
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
   name: "settingsPage",
+  middleware: 'authenticated',
+  methods: {
+    onLogout() {
+      Cookie.remove('user');
+      this.$store.commit('setUser', null);
+      this.$router.push('/');
+    }
+  }  
 };
 </script>
 
